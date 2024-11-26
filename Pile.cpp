@@ -83,7 +83,7 @@ inline bool PPile<T>::isPalindrome(){
 template <typename T>
 inline bool PPile<T>::checkEquation() {
     if (estVide()) return true;
-
+    invertStack();
     PPile<T> tempPile;
     auto current = sommetNoeud.get();
     bool lastWasOperand = false;
@@ -95,107 +95,26 @@ inline bool PPile<T>::checkEquation() {
         }
         else if (current->val == ')') {
             if (tempPile.estVide()) return false;
-            if (current->val == ')' && tempPile.sommet() == '(') {
+            if (tempPile.sommet() == '(') {
                 tempPile.depile();
             } else {
                 return false;
             }
             lastWasOperand = false;
         }
-        else if (isalnum(current->val)) {
-            if (lastWasOperand) return false; // Two operands in a row
+        else if (isdigit(current->val)) {
+            if (lastWasOperand) return false;
             lastWasOperand = true;
         }
-        else {
+        else if (current->val == '+' || current->val == '-' || current->val == '*' || current->val == '/') {
             lastWasOperand = false;
+        } else {
+            return false;
         }
         current = current->suivant.get();
     }
 
     return tempPile.estVide();
-}
-
-template <typename T>
-double PPile<T>::solveEquation() {
-    if (!checkEquation()) return 0;
-
-    PPile<T> values;
-    PPile<T> ops;
-    auto current = sommetNoeud.get();
-
-    while (current) {
-        if (current->val == '(') {
-            ops.empile(current->val);
-        } else if (isdigit(current->val)) {
-            values.empile(current->val - '0');
-        } else if (current->val == ')') {
-            while (!ops.estVide() && ops.sommet() != '(') {
-                char op = ops.sommet();
-                ops.depile();
-
-                double val2 = values.sommet();
-                values.depile();
-
-                double val1 = values.sommet();
-                values.depile();
-
-                switch (op) {
-                    case '+': values.empile(val1 + val2); break;
-                    case '-': values.empile(val1 - val2); break;
-                    case '*': values.empile(val1 * val2); break;
-                    case '/': values.empile(val1 / val2); break;
-                }
-            }
-            ops.depile();
-        } else {
-            while (!ops.estVide() && precedence(ops.sommet()) >= precedence(current->val)) {
-                char op = ops.sommet();
-                ops.depile();
-
-                double val2 = values.sommet();
-                values.depile();
-
-                double val1 = values.sommet();
-                values.depile();
-
-                switch (op) {
-                    case '+': values.empile(val1 + val2); break;
-                    case '-': values.empile(val1 - val2); break;
-                    case '*': values.empile(val1 * val2); break;
-                    case '/': values.empile(val1 / val2); break;
-                }
-            }
-            ops.empile(current->val);
-        }
-        current = current->suivant.get();
-    }
-
-    while (!ops.estVide()) {
-        char op = ops.sommet();
-        ops.depile();
-
-        double val2 = values.sommet();
-        values.depile();
-
-        double val1 = values.sommet();
-        values.depile();
-
-        switch (op) {
-            case '+': values.empile(val1 + val2); break;
-            case '-': values.empile(val1 - val2); break;
-            case '*': values.empile(val1 * val2); break;
-            case '/': values.empile(val1 / val2); break;
-        }
-    }
-
-    return values.sommet();
-}
-
-template <typename T>
-int PPile<T>::precedence(char op) const {
-    if (op == '+' || op == '-') return 1;
-    if (op == '*' || op == '/') return 2;
-    return 0;
 }
 
 template class PPile<char>;

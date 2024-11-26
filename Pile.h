@@ -14,7 +14,6 @@ class Noeud {
 public:
     T val;
     unique_ptr<Noeud<T>> suivant;
-
     Noeud(T value);
 };
 
@@ -32,9 +31,8 @@ public:
     void invertStack();
     bool isPalindrome();
     bool checkEquation();
-    double solveEquation();
-    int precedence(char op) const;
 };
+
 
 
 #endif // PILE_H

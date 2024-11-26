@@ -31,7 +31,7 @@ T VPile<T>::sommet() const {
 
 template <typename T>
 void VPile<T>::affiche() {
-    std::vector<T> temp;
+    vector<T> temp;
     while (!elements.empty()) {
         T val = elements.back();
         cout << val << " " << ;
@@ -48,12 +48,12 @@ void VPile<T>::affiche() {
 
 template <typename T>
 void VPile<T>::invertStack() {
-    std::reverse(elements.begin(), elements.end());
+    reverse(elements.begin(), elements.end());
 }
 
 template <typename T>
 bool VPile<T>::isPalindrome() {
-    return std::equal(elements.begin(), elements.begin() + elements.size() / 2, elements.rbegin());
+    return equal(elements.begin(), elements.begin() + elements.size() / 2, elements.rbegin());
 }
 
 template class VPile<int>;
