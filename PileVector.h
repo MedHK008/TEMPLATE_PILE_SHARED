@@ -9,19 +9,9 @@
 using namespace std;
 
 template <typename T>
-
-class Noeud {
-public:
-    T val;
-    unique_ptr<Noeud<T>> suivant;
-
-    Noeud(T value);
-};
-
-template <typename T>
-class PPile {
+class VPile {
 private:
-    unique_ptr<Noeud<T>> sommetNoeud;
+    vector<T> elements;
 public:
     PPile() = default;
     bool estVide() const;
@@ -31,10 +21,8 @@ public:
     void affiche();
     void invertStack();
     bool isPalindrome();
-    bool checkEquation();
-    double solveEquation();
-    int precedence(char op) const;
 };
+
 
 
 #endif // PILE_H
